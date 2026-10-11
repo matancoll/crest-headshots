@@ -1,0 +1,1178 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Team crest headshots</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<style>
+:root{
+  --navy:#041E41; --red:#D9272E; --red-press:#B81F25; --gray:#D2D0CD; --white:#FFFFFF; --ink:#232222;
+  --ground:#FFFFFF; --surface:#F4F3F1; --text:var(--ink); --muted:#5B5957; --rule:var(--gray);
+  --band:var(--navy); --band-text:var(--white); --focus:#1D5FBF; --ok:#1E6B3A; --bad:#B81F25;
+  --font:"Gotham","Montserrat",system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#03142C; --surface:#0A2547; --text:#F3F2F0; --muted:#B8B6B3; --rule:#22416B;
+    --band:#010B19; --focus:#7FB0FF; --ok:#6FD39A; --bad:#FF8A8E; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#03142C; --surface:#0A2547; --text:#F3F2F0; --muted:#B8B6B3; --rule:#22416B;
+  --band:#010B19; --focus:#7FB0FF; --ok:#6FD39A; --bad:#FF8A8E; color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:inherit}
+[hidden]{display:none!important}
+html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;min-height:100%;background:var(--ground);color:var(--text);font-family:var(--font);font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased}
+img,canvas{max-width:100%}
+button{font:inherit}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+
+/* Masthead: a navy band, title set big and uppercase per the brand guide */
+.band{background:var(--band);color:var(--band-text)}
+.band-inner{max-width:1180px;margin:0 auto;padding:40px 24px 36px;display:grid;gap:14px}
+h1{margin:0;font-weight:800;font-size:clamp(28px,4.6vw,48px);line-height:1.05;letter-spacing:.01em;text-transform:uppercase}
+.lead{margin:0;max-width:62ch;color:var(--gray);font-size:17px}
+.stripes{height:10px;background:linear-gradient(var(--red) 0 40%,transparent 40% 60%,var(--red) 60% 100%);max-width:96px}
+
+main{max-width:1180px;margin:0 auto;padding:32px 24px 64px;display:grid;grid-template-columns:minmax(260px,340px) 1fr;gap:40px;align-items:start}
+@media (max-width:820px){main{grid-template-columns:1fr;gap:28px}}
+
+/* Left: add photos */
+.add{display:grid;gap:18px;position:sticky;top:calc(16px + env(safe-area-inset-top,0px))}
+@media (max-width:820px){.add{position:static}}
+.drop{border:2px solid var(--navy);background:var(--surface);padding:28px 22px;display:grid;gap:12px;justify-items:start;transition:background .15s,border-color .15s}
+:root[data-theme="dark"] .drop{border-color:var(--rule)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .drop{border-color:var(--rule)}}
+.drop.over{border-color:var(--red);background:color-mix(in srgb,var(--red) 8%,var(--surface))}
+.drop h2{margin:0;font-size:20px;font-weight:700}
+.drop p{margin:0;color:var(--muted);font-size:14px}
+.btn{appearance:none;border:0;background:var(--red);color:#fff;font-weight:700;font-size:15px;padding:12px 18px;cursor:pointer;min-height:44px}
+.btn:hover{background:var(--red-press)}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+.btn.quiet{background:transparent;color:var(--text);border:2px solid var(--text);padding:10px 16px}
+.btn.quiet:hover{background:var(--text);color:var(--ground)}
+.note{font-size:14px;color:var(--muted);border-left:4px solid var(--navy);padding:2px 0 2px 14px;margin:0}
+:root[data-theme="dark"] .note{border-left-color:var(--gray)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .note{border-left-color:var(--gray)}}
+.note strong{color:var(--text);font-weight:700}
+
+/* Right: results */
+.results{display:grid;gap:28px;min-width:0}
+.results-head{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between}
+.results-head h2{margin:0;font-size:20px;font-weight:700}
+.empty{border:1px dashed var(--rule);padding:48px 24px;color:var(--muted);text-align:center}
+.card{border-top:3px solid var(--navy);padding-top:18px;display:grid;grid-template-columns:minmax(0,300px) minmax(0,1fr);gap:24px}
+:root[data-theme="dark"] .card{border-top-color:var(--gray)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .card{border-top-color:var(--gray)}}
+@media (max-width:640px){.card{grid-template-columns:1fr}}
+.card h3{margin:0 0 4px;font-size:17px;font-weight:700;word-break:break-all}
+.status{margin:0;font-size:14px;color:var(--muted)}
+.status.ok{color:var(--ok)} .status.bad{color:var(--bad)}
+.side{display:grid;gap:14px;align-content:start}
+.actions{display:flex;flex-wrap:wrap;gap:10px}
+.thumb{width:100%;aspect-ratio:1;object-fit:cover;background:var(--surface);display:block}
+.hint{font-size:13px;color:var(--muted);margin:0}
+
+/* Before/after close-up: the one bold element */
+.compare{position:relative;width:100%;max-width:300px;aspect-ratio:var(--ar,3/4);background:#000;overflow:hidden;touch-action:none;user-select:none}
+.compare canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.compare .after{clip-path:inset(0 0 0 var(--pos,50%))}
+.compare .handle{position:absolute;top:0;bottom:0;left:var(--pos,50%);width:3px;margin-left:-1px;background:var(--white);box-shadow:0 0 0 1px rgba(4,30,65,.5)}
+.compare .tag{position:absolute;bottom:8px;font-size:12px;font-weight:700;color:#fff;background:rgba(4,30,65,.85);padding:2px 8px}
+.compare .tag.b{left:8px} .compare .tag.a{right:8px}
+.compare input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:ew-resize;margin:0}
+.compare input:focus-visible + .handle{outline:3px solid var(--focus)}
+.bar{height:4px;background:var(--rule);overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--red);transition:width .3s}
+.visually-hidden{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+.crest-pick{border:0;margin:0;padding:0;display:grid;gap:10px}
+.crest-pick legend{font-size:20px;font-weight:700;padding:0;margin-bottom:6px}
+.opt{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;align-items:start;border:2px solid var(--rule);padding:12px 14px;cursor:pointer;background:var(--ground)}
+.opt:has(input:checked){border-color:var(--red);background:color-mix(in srgb,var(--red) 6%,var(--ground))}
+.opt input{margin:3px 0 0;width:18px;height:18px;accent-color:var(--red)}
+.opt b{font-weight:700}
+.opt small{grid-column:2;color:var(--muted);font-size:13px;line-height:1.4}
+.need{font-size:13px;color:var(--muted);margin:0}
+.badge{display:inline-block;font-size:12px;font-weight:700;padding:2px 8px;background:var(--navy);color:#fff;margin-bottom:6px}
+.fb{border-top:1px solid var(--rule);padding-top:12px;display:grid;gap:10px}
+.fb-q{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.fb-q span{font-size:14px;font-weight:700;margin-right:4px}
+.chip{appearance:none;border:2px solid var(--text);background:transparent;color:var(--text);font-weight:700;font-size:14px;padding:6px 12px;cursor:pointer;min-height:36px}
+.chip[aria-pressed="true"]{background:var(--text);color:var(--ground)}
+.fb-form{display:grid;gap:10px}
+.fb-form fieldset{border:0;margin:0;padding:0;display:grid;gap:6px}
+.fb-form legend{font-size:14px;font-weight:700;margin-bottom:4px}
+.fb-form label{font-size:14px;display:flex;gap:8px;align-items:flex-start}
+.fb-form input[type=checkbox]{width:16px;height:16px;margin-top:2px;accent-color:var(--red)}
+.fb-form textarea{font:inherit;font-size:14px;width:100%;min-height:72px;padding:8px 10px;border:2px solid var(--rule);background:var(--ground);color:var(--text);resize:vertical}
+.fb-form textarea:focus{border-color:var(--focus);outline:none}
+.fb-msg{font-size:13px;margin:0;color:var(--muted)} .fb-msg.ok{color:var(--ok)} .fb-msg.bad{color:var(--bad)}
+
+
+.ver{margin:0;font-size:13px;font-weight:500;color:var(--gray);letter-spacing:.02em}
+.update{background:var(--red);color:#fff}
+.update-inner{max-width:1180px;margin:0 auto;padding:10px 24px;display:flex;gap:14px;align-items:center;justify-content:space-between;flex-wrap:wrap;font-weight:700;font-size:15px}
+.update .btn{background:#fff;color:var(--red);min-height:36px;padding:8px 14px}
+.update .btn:hover{background:var(--gray)}
+.foot{border-top:1px solid var(--rule)}
+.foot-inner{max-width:1180px;margin:0 auto;padding:20px 24px 32px;font-size:13px;color:var(--muted);display:grid;gap:8px}
+.foot p{margin:0}
+.foot summary{cursor:pointer;font-weight:700;color:var(--text);width:max-content}
+.foot ul{margin:8px 0 0;padding-left:18px;display:grid;gap:4px}
+.foot b{color:var(--text)}
+@media (prefers-reduced-motion: reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<header class="band">
+  <div class="band-inner">
+    <div class="stripes" aria-hidden="true"></div>
+    <h1>Team crest headshots</h1>
+    <p class="lead">Turn a raw studio headshot into the team crest version. The new crest is fitted to each shirt, following its angle, folds, lighting and focus.</p>
+    <p class="ver" data-version></p>
+  </div>
+</header>
+<div class="update" id="update" hidden role="status"><div class="update-inner"><span id="update-text"></span><button type="button" class="btn" onclick="location.reload()">Reload</button></div></div>
+
+<main>
+  <section class="add" aria-labelledby="add-h">
+    <fieldset class="crest-pick">
+      <legend>Team crest</legend>
+      <label class="opt"><input type="radio" name="crest" value="stifel"><b>Stifel U.S. Ski Team</b><small>Alpine, Cross Country, Freestyle Aerials, Freestyle Moguls, Freeski, Para Alpine, Para Nordic, Ski Jumping</small></label>
+      <label class="opt"><input type="radio" name="crest" value="toyota"><b>Toyota U.S. Snowboard Team</b><small>Halfpipe, Slopestyle, Snowboard Cross, Para Snowboard</small></label>
+    </fieldset>
+    <fieldset class="crest-pick">
+      <legend>Edges</legend>
+      <label class="opt"><input type="radio" name="edges" value="straight" checked><b>Straight lines</b><small>Clean, straight crest edges that still follow the shirt's tilt. Recommended.</small></label>
+      <label class="opt"><input type="radio" name="edges" value="traced"><b>Follow the print</b><small>The original rules: edges trace the old crest's outline, keeping small bends from folds. Can look wavy on soft-focus photos.</small></label>
+    </fieldset>
+    <div class="drop" id="drop">
+      <h2 id="add-h">Add headshots</h2>
+      <p>Square studio headshots in the team tee, with the U.S. Ski Team crest on the left chest. JPG or PNG, one or many.</p>
+      <button class="btn" id="pick" type="button" disabled>Choose photos</button>
+      <input id="file" type="file" accept="image/jpeg,image/png" multiple hidden>
+      <p class="need" id="need">Pick a team crest first.</p>
+    </div>
+    <p class="note">Photos are processed on this computer and never uploaded.</p>
+    <p class="note">Freeride content uses the primary crest, so freeride headshots need no change.</p>
+    <p class="note">Check every close-up before sending. If something looks off, use <strong>Something's off</strong> under that photo, or send it to Content &amp; Creative for a manual edit.</p>
+  </section>
+
+  <div class="right" style="display:grid;gap:36px;min-width:0">
+  <section class="results" aria-labelledby="res-h">
+    <div class="results-head">
+      <h2 id="res-h">Finished headshots</h2>
+      <button class="btn quiet" id="all" type="button" hidden>Download all (.zip)</button>
+    </div>
+    <p class="status" id="dl-note" hidden></p>
+    <div class="empty" id="empty">Finished headshots appear here, each with a close-up to check the crest.</div>
+    <div id="list" style="display:grid;gap:28px"></div>
+  </section>
+  </div>
+</main>
+
+<footer class="foot">
+  <div class="foot-inner">
+    <p class="ver-foot" data-version></p>
+    <details>
+      <summary>What's new</summary>
+      <ul>
+        <li><b>1.7 · Oct 10, 2026</b> · Works when hosted on any website (such as GitHub Pages): normal download buttons, feedback through a form link.</li>
+        <li><b>1.6 · Oct 10, 2026</b> · Removed the owner's feedback inbox. Feedback on each photo still works.</li>
+        <li><b>1.5 · Oct 10, 2026</b> · Choose the edge style: straight lines (default) or follow the print (the original rules). Redo any photo in the other style.</li>
+        <li><b>1.4 · Oct 10, 2026</b> · Version number and publish date; notice when a newer version is available.</li>
+        <li><b>1.3 · Oct 10, 2026</b> · Straight crest edges: no more wavy outlines on soft-focus photos.</li>
+        <li><b>1.2 · Oct 10, 2026</b> · Feedback inbox for the page owner.</li>
+        <li><b>1.1 · Oct 10, 2026</b> · Toyota U.S. Snowboard Team crest; feedback on every photo; fixed a dark band at the top of the crest on large photos.</li>
+        <li><b>1.0 · Oct 10, 2026</b> · First release: Stifel U.S. Ski Team crest.</li>
+      </ul>
+    </details>
+  </div>
+</footer>
+
+<script type="text/plain" id="crest-stifel"><svg id="Layer_1" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 1080 1080">
+  
+  <defs>
+    <style>
+      .st0 {
+        fill: #cecfcd;
+      }
+
+      .st1 {
+        fill: #001e42;
+      }
+
+      .st2 {
+        fill: #fff;
+      }
+
+      .st3 {
+        fill: #d52a2f;
+      }
+    </style>
+  </defs>
+  <path class="st2" d="M779.09,100.91h-502.96v816.05l251.48,62.12,251.49-62.12V100.91h-.01ZM295.16,240.13v-120.19h464.9v120.19h-464.9Z"/>
+  <rect class="st1" x="295.16" y="119.95" width="464.9" height="120.29"/>
+  <g>
+    <polygon class="st1" points="476.76 739.42 487.82 740.81 575.41 687.97 676.9 814.97 696.03 819.66 759.18 879.12 759.18 571.65 295.16 571.65 295.16 758.02 438.62 690.04 476.76 739.42"/>
+    <polygon class="st0" points="464.17 802.35 547.25 824.03 490.56 757.97 468.6 755.05 438.4 714.29 438.4 773.56 464.17 802.35"/>
+    <polygon class="st0" points="623.13 843.73 730.07 871.63 686.28 835.53 669.48 832.26 575.34 713.27 575.34 798.97 623.13 843.73"/>
+    <polygon class="st3" points="295.16 898.04 524.39 957.74 527.18 958.46 527.18 958.46 609.15 937.02 295.16 855.72 295.16 898.04"/>
+    <polygon class="st3" points="295.16 777.59 295.16 820.01 677.52 919.31 759.18 898.1 295.16 777.59"/>
+  </g>
+  <g>
+    <path class="st1" d="M729.33,323.05c-22.29-12.67-51.44-20.6-74.22-20.6-17.34,0-26.51,6.13-26.51,15.11v.6c0,8.98,7.53,12.71,38.96,19.59,48.77,10.18,91.61,22.12,91.61,65.52v.09c0,24.95-14.64,43.07-37,54.38-16.38,8.28-36.93,12.92-58.91,13.9-39.43,1.78-84.97-9.12-110.82-26.18,8.04-15.83,15.94-31.36,23.78-46.77,22.92,16.45,59.35,25.38,85.87,25.38,17.35,0,26.51-6.13,26.51-15.11v-.6c0-8.97-7.53-12.71-38.96-19.59-48.77-10.18-89.45-22.74-89.45-65.51v-.18c0-29.31,18.73-48.1,42.35-58.13,18.96-8.04,41.41-10.08,57.21-10.09,60.02,0,89.67,20.2,94.22,22.59-8.25,15.27-24.64,45.6-24.64,45.6h0Z"/>
+    <path class="st1" d="M466.45,258.84s.02,68.83-.02,102.16c0,32.93-14.97,55.91-50.91,55.91s-50.91-22.97-50.91-55.91c-.05-33.33-.02-102.16-.02-102.16h-69.43v112.52c0,52.14,24.62,99.58,120.36,99.58s120.36-47.44,120.36-99.58v-112.52h-69.43Z"/>
+  </g>
+  <path class="st2" d="M698.81,621.51l-26.46,17.57,10.17,28.54-26.51-17.62-26.57,17.62,10.18-28.54-26.41-17.57h32.63l10.17-28.38,10.12,28.38h32.68Z"/>
+  <path class="st2" d="M570.41,621.51l-26.46,17.57,10.17,28.54-26.51-17.62-26.57,17.62,10.17-28.54-26.4-17.57h32.63l10.17-28.38,10.12,28.38h32.68Z"/>
+  <path class="st2" d="M442,621.51l-26.45,17.57,10.17,28.54-26.52-17.62-26.56,17.62,10.17-28.54-26.4-17.57h32.62l10.17-28.38,10.12,28.38h32.68,0Z"/>
+  
+  <g>
+    <path class="st2" d="M304.86,208.79l12.88-15.38c8.22,6.56,17.41,10.01,27.06,10.01,6.2,0,9.54-2.15,9.54-5.72v-.24c0-3.46-2.74-5.37-14.07-7.99-17.76-4.05-31.47-9.06-31.47-26.23v-.24c0-15.5,12.28-26.71,32.31-26.71,14.19,0,25.27,3.82,34.33,11.09l-11.56,16.33c-7.63-5.37-15.98-8.22-23.37-8.22-5.6,0-8.34,2.38-8.34,5.37v.24c0,3.81,2.86,5.48,14.42,8.11,19.2,4.17,31.12,10.37,31.12,25.99v.24c0,17.05-13.47,27.18-33.74,27.18-14.78,0-28.85-4.65-39.1-13.83h-.01Z"/>
+    <path class="st2" d="M411.67,158h-25.04v-20.27h73.2v20.27h-25.04v63.19h-23.13v-63.19h.01Z"/>
+    <path class="st2" d="M475.21,137.73h23.25v83.46h-23.25v-83.46h0Z"/>
+    <path class="st2" d="M518.48,137.73h66.76v20.27h-43.63v14.19h39.46v19.2h-39.46v29.8h-23.13v-83.46h0Z"/>
+    <path class="st2" d="M600.49,137.73h67.12v19.67h-44.23v12.64h40.06v18.24h-40.06v13.23h44.83v19.67h-67.72v-83.46h0Z"/>
+    <path class="st2" d="M684.77,137.73h23.13v63.19h40.42v20.27h-63.54v-83.46h-.01Z"/>
+  </g>
+  <g>
+    <path class="st1" d="M295.45,545.54l9.66-11.54c6.17,4.92,13.06,7.51,20.3,7.51,4.65,0,7.15-1.61,7.15-4.29v-.18c0-2.59-2.06-4.02-10.55-5.99-13.32-3.04-23.61-6.8-23.61-19.67v-.18c0-11.63,9.21-20.03,24.24-20.03,10.64,0,18.96,2.86,25.75,8.32l-8.67,12.25c-5.72-4.02-11.98-6.17-17.53-6.17-4.2,0-6.26,1.79-6.26,4.02v.18c0,2.86,2.14,4.11,10.82,6.08,14.4,3.13,23.34,7.78,23.34,19.5v.18c0,12.79-10.1,20.39-25.31,20.39-11.09,0-21.64-3.49-29.33-10.37h0Z"/>
+    <path class="st1" d="M362.08,492.24h17.35v25.4l21.55-25.4h20.57l-23.7,26.92,24.51,35.68h-20.84l-15.74-23.25-6.35,7.06v16.19h-17.35v-62.6h0Z"/>
+    <path class="st1" d="M431.29,492.24h17.44v62.6h-17.44v-62.6h0Z"/>
+    <path class="st1" d="M507.4,507.45h-18.78v-15.21h54.91v15.21h-18.78v47.39h-17.35v-47.39h0Z"/>
+    <path class="st1" d="M554.71,492.24h50.35v14.76h-33.18v9.48h30.05v13.68h-30.05v9.93h33.62v14.75h-50.79v-62.6h0Z"/>
+    <path class="st1" d="M639.58,491.79h16.72l26.65,63.05h-18.6l-4.56-11.18h-24.15l-4.47,11.18h-18.24l26.65-63.05h0ZM654.78,530.16l-6.98-17.8-7.07,17.8h14.05Z"/>
+    <path class="st1" d="M692.61,492.24h18.33l14.94,24.24,14.93-24.24h18.33v62.6h-17.26v-35.95l-16.01,24.5h-.36l-15.92-24.32v35.77h-16.99v-62.6h0Z"/>
+  </g>
+</svg></script>
+<script type="text/plain" id="crest-toyota"><svg id="Layer_1" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 1080 1080">
+  
+  <defs>
+    <style>
+      .st0 {
+        fill: #001e42;
+      }
+
+      .st1 {
+        fill: #cecfcd;
+      }
+
+      .st2 {
+        fill: #fff;
+      }
+
+      .st3 {
+        fill: #d52a2f;
+      }
+    </style>
+  </defs>
+  <g>
+    <path class="st2" d="M784.28,123.22h-502.96v770.43l251.48,62.12,251.49-62.12V123.22ZM300.35,246.89v-104.63h464.9v104.63h-464.9Z"/>
+    <rect class="st0" x="300.35" y="142.25" width="464.9" height="104.74"/>
+    <g>
+      <path class="st0" d="M734.52,329.81c-22.29-12.67-51.44-20.6-74.22-20.6-17.34,0-26.51,6.13-26.51,15.11v.6c0,8.98,7.53,12.71,38.96,19.59,48.77,10.18,91.61,22.12,91.61,65.52v.09c0,24.95-14.64,43.07-37,54.38-16.38,8.28-36.93,12.92-58.91,13.9-39.43,1.78-84.97-9.12-110.82-26.18,8.04-15.83,15.94-31.36,23.78-46.77,22.92,16.45,59.35,25.38,85.87,25.38,17.35,0,26.51-6.13,26.51-15.11v-.6c0-8.97-7.53-12.71-38.96-19.59-48.77-10.18-89.45-22.74-89.45-65.51v-.18c0-29.31,18.73-48.1,42.35-58.13,18.96-8.04,41.41-10.08,57.21-10.09,60.02,0,89.67,20.2,94.22,22.59-8.25,15.27-24.64,45.6-24.64,45.6Z"/>
+      <path class="st0" d="M471.64,265.6s.02,68.83-.02,102.16c0,32.93-14.97,55.91-50.91,55.91s-50.91-22.97-50.91-55.91c-.05-33.33-.02-102.16-.02-102.16h-69.43v112.52c0,52.14,24.62,99.58,120.36,99.58s120.36-47.44,120.36-99.58v-112.52h-69.43Z"/>
+    </g>
+    <g>
+      <g>
+        <polygon class="st0" points="481.95 715.27 493 716.65 580.6 663.81 682.09 790.81 701.22 795.5 764.37 854.96 764.37 547.49 300.35 547.49 300.35 733.86 443.81 665.88 481.95 715.27"/>
+        <polygon class="st1" points="469.36 778.19 552.44 799.88 495.75 733.82 473.79 730.9 443.59 690.13 443.59 749.4 469.36 778.19"/>
+        <polygon class="st1" points="628.32 819.57 735.26 847.47 691.47 811.38 674.67 808.1 580.53 689.11 580.53 774.82 628.32 819.57"/>
+        <polygon class="st3" points="300.35 873.88 529.58 933.58 532.37 934.31 532.37 934.31 614.34 912.86 300.35 831.56 300.35 873.88"/>
+        <polygon class="st3" points="300.35 753.43 300.35 795.85 682.71 895.15 764.37 873.94 300.35 753.43"/>
+      </g>
+      <path class="st2" d="M703.99,597.36l-26.46,17.57,10.17,28.54-26.51-17.62-26.57,17.62,10.18-28.54-26.41-17.57h32.63l10.17-28.38,10.12,28.38h32.68Z"/>
+      <path class="st2" d="M575.6,597.36l-26.46,17.57,10.17,28.54-26.51-17.62-26.57,17.62,10.17-28.54-26.4-17.57h32.63l10.17-28.38,10.12,28.38h32.68Z"/>
+      <path class="st2" d="M447.19,597.36l-26.45,17.57,10.17,28.54-26.52-17.62-26.56,17.62,10.17-28.54-26.4-17.57h32.62l10.17-28.38,10.12,28.38h32.68Z"/>
+    </g>
+    
+  </g>
+  <g>
+    <path class="st0" d="M300.35,527.46l7.01-8.38c4.48,3.57,9.48,5.45,14.74,5.45,3.38,0,5.2-1.17,5.2-3.12v-.13c0-1.88-1.49-2.92-7.66-4.35-9.68-2.21-17.15-4.94-17.15-14.29v-.13c0-8.44,6.69-14.55,17.6-14.55,7.73,0,13.77,2.08,18.7,6.04l-6.3,8.9c-4.16-2.92-8.7-4.48-12.73-4.48-3.05,0-4.55,1.3-4.55,2.92v.13c0,2.08,1.56,2.99,7.86,4.42,10.46,2.27,16.95,5.65,16.95,14.16v.13c0,9.29-7.34,14.81-18.38,14.81-8.05,0-15.72-2.53-21.3-7.53Z"/>
+    <path class="st0" d="M346.78,488.76h11.75l18.7,24.03v-24.03h12.47v45.46h-11.04l-19.42-24.94v24.94h-12.47v-45.46Z"/>
+    <path class="st0" d="M396.86,511.62v-.13c0-13.05,10.52-23.64,24.55-23.64s24.42,10.46,24.42,23.51v.13c0,13.05-10.52,23.64-24.55,23.64s-24.42-10.46-24.42-23.51ZM432.97,511.62v-.13c0-6.56-4.74-12.27-11.69-12.27s-11.49,5.59-11.49,12.14v.13c0,6.56,4.74,12.27,11.62,12.27s11.56-5.59,11.56-12.14Z"/>
+    <path class="st0" d="M447.39,488.76h13.31l7.92,26.3,8.77-26.43h10.85l8.77,26.43,7.92-26.3h13.05l-15.2,45.78h-10.98l-9.16-26.17-9.09,26.17h-10.98l-15.2-45.78Z"/>
+    <path class="st0" d="M523.64,488.76h23.31c5.72,0,9.74,1.43,12.4,4.09,1.82,1.82,2.92,4.22,2.92,7.34v.13c0,5.26-2.99,8.38-7.01,10.13,5.52,1.82,9.03,4.94,9.03,11.1v.13c0,7.79-6.36,12.53-17.21,12.53h-23.44v-45.46ZM543.84,506.88c3.83,0,5.97-1.3,5.97-3.96v-.13c0-2.47-1.95-3.9-5.71-3.9h-8.18v7.99h7.92ZM545.66,524.09c3.83,0,6.04-1.49,6.04-4.16v-.13c0-2.47-1.95-4.09-6.17-4.09h-9.61v8.38h9.74Z"/>
+    <path class="st0" d="M569.17,511.62v-.13c0-13.05,10.52-23.64,24.55-23.64s24.42,10.46,24.42,23.51v.13c0,13.05-10.52,23.64-24.55,23.64s-24.42-10.46-24.42-23.51ZM605.28,511.62v-.13c0-6.56-4.74-12.27-11.69-12.27s-11.49,5.59-11.49,12.14v.13c0,6.56,4.74,12.27,11.62,12.27s11.56-5.59,11.56-12.14Z"/>
+    <path class="st0" d="M638.14,488.43h12.14l19.35,45.78h-13.51l-3.31-8.12h-17.53l-3.25,8.12h-13.25l19.35-45.78ZM649.18,516.29l-5.07-12.92-5.13,12.92h10.2Z"/>
+    <path class="st0" d="M674.71,488.76h21.5c6.95,0,11.76,1.82,14.81,4.94,2.66,2.6,4.03,6.1,4.03,10.58v.13c0,6.95-3.7,11.56-9.35,13.96l10.85,15.85h-14.55l-9.16-13.77h-5.52v13.77h-12.6v-45.46ZM695.62,510.58c4.29,0,6.75-2.08,6.75-5.39v-.13c0-3.57-2.6-5.39-6.82-5.39h-8.25v10.91h8.31Z"/>
+    <path class="st0" d="M722.06,488.76h17.53c16.24,0,25.65,9.35,25.65,22.47v.13c0,13.12-9.55,22.86-25.91,22.86h-17.27v-45.46ZM739.79,523.05c7.53,0,12.53-4.16,12.53-11.49v-.13c0-7.27-5-11.5-12.53-11.5h-5.13v23.12h5.13Z"/>
+  </g>
+  <g>
+    <path class="st2" d="M333.11,175.68h-22.1v-17.9h64.63v17.9h-22.11v55.79h-20.42v-55.79Z"/>
+    <path class="st2" d="M379.22,194.84v-.21c0-21.16,17.05-38.32,39.79-38.32s39.58,16.95,39.58,38.11v.21c0,21.16-17.05,38.32-39.79,38.32s-39.58-16.95-39.58-38.1ZM437.75,194.84v-.21c0-10.63-7.68-19.89-18.95-19.89s-18.63,9.05-18.63,19.68v.21c0,10.63,7.68,19.9,18.84,19.9s18.74-9.05,18.74-19.68Z"/>
+    <path class="st2" d="M483.96,203.89l-28-46.11h23.26l15.16,26.84,15.26-26.84h22.84l-28,45.79v27.89h-20.53v-27.58Z"/>
+    <path class="st2" d="M529.76,194.84v-.21c0-21.16,17.05-38.32,39.79-38.32s39.58,16.95,39.58,38.11v.21c0,21.16-17.05,38.32-39.79,38.32s-39.58-16.95-39.58-38.1ZM588.28,194.84v-.21c0-10.63-7.68-19.89-18.95-19.89s-18.63,9.05-18.63,19.68v.21c0,10.63,7.68,19.9,18.84,19.9s18.74-9.05,18.74-19.68Z"/>
+    <path class="st2" d="M634.92,175.68h-22.1v-17.9h64.63v17.9h-22.1v55.79h-20.42v-55.79Z"/>
+    <path class="st2" d="M702.71,157.26h19.68l31.37,74.21h-21.89l-5.37-13.16h-28.42l-5.26,13.16h-21.47l31.37-74.21ZM720.6,202.41l-8.21-20.95-8.32,20.95h16.53Z"/>
+  </g>
+</svg></script>
+<script>// Stifel crest engine — browser port of the Python pipeline (tailor2.py).
+// Pure functions over typed arrays + canvas for decode/encode. No network.
+const CrestEngine = (() => {
+  // ---------- template geometry (vector coordinates of each crest, 1080 viewBox) ----------
+  // Both team crests share the same shield and lower panel; the primary (US) crest's top edge sits
+  // 305.7 units above the star row (calibrated across six raw photos).
+  const GEOMS = {
+    stifel: { TX0: 276.13, TX1: 779.09, TY0: 100.91, TY1: 979.08,
+      Lt: { TL: [276.13, 100.91], TR: [779.09, 100.91], BL: [276.13, 916.96], BR: [779.09, 916.96], K: [527.61, 979.08] },
+      St: [[398.70, 633.91], [527.0, 633.92], [655.5, 633.99]] },
+    toyota: { TX0: 281.32, TX1: 784.28, TY0: 123.22, TY1: 955.77,
+      Lt: { TL: [281.32, 123.22], TR: [784.28, 123.22], BL: [281.32, 893.65], BR: [784.28, 893.65], K: [532.80, 955.77] },
+      St: [[403.76, 609.41], [532.26, 609.53], [660.68, 609.52]] },
+  };
+  Object.values(GEOMS).forEach(g => {
+    g.size = 1080; g.SH = g.TY1 - g.TY0;
+    const starY = (g.St[0][1] + g.St[1][1] + g.St[2][1]) / 3; g.TOPY = starY - 305.7;
+    g.TL_F = [g.TX0, g.TOPY]; g.TR_F = [g.TX1, g.TOPY];
+  });
+  let T = GEOMS.stifel;
+  // outline height/width: plain US crest measured 1.26–1.44 in photos, team crests 1.64–1.96
+  const ALREADY_ASPECT = 1.54;
+
+  // ---------- small helpers ----------
+  const lumW = [0.299, 0.587, 0.114];
+  const tick = () => new Promise(r => setTimeout(r, 0));
+  function percentile(arr, p) {
+    if (!arr.length) return 0;
+    const a = Float32Array.from(arr).sort();
+    const idx = (p / 100) * (a.length - 1), lo = Math.floor(idx), hi = Math.ceil(idx);
+    return a[lo] + (a[hi] - a[lo]) * (idx - lo);
+  }
+  const sub = (a, b) => [a[0] - b[0], a[1] - b[1]];
+  const add = (a, b) => [a[0] + b[0], a[1] + b[1]];
+  const mul = (a, s) => [a[0] * s, a[1] * s];
+  const norm = a => Math.hypot(a[0], a[1]);
+  const dot = (a, b) => a[0] * b[0] + a[1] * b[1];
+  const unit = a => mul(a, 1 / norm(a));
+
+  // ---------- binary morphology (scipy defaults: cross structuring element, border = 0) ----------
+  function erodeCross(m, w, h, it) {
+    let a = m;
+    for (let k = 0; k < it; k++) {
+      const b = new Uint8Array(w * h);
+      for (let y = 1; y < h - 1; y++) for (let x = 1; x < w - 1; x++) {
+        const i = y * w + x;
+        b[i] = a[i] && a[i - 1] && a[i + 1] && a[i - w] && a[i + w] ? 1 : 0;
+      }
+      a = b;
+    }
+    return a;
+  }
+  function dilateCross(m, w, h, it) {
+    let a = m;
+    for (let k = 0; k < it; k++) {
+      const b = new Uint8Array(w * h);
+      for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
+        const i = y * w + x;
+        b[i] = a[i] || (x > 0 && a[i - 1]) || (x < w - 1 && a[i + 1]) || (y > 0 && a[i - w]) || (y < h - 1 && a[i + w]) ? 1 : 0;
+      }
+      a = b;
+    }
+    return a;
+  }
+  function dilateSquare(m, w, h, r) { // square (2r+1)
+    const t = new Uint8Array(w * h), o = new Uint8Array(w * h);
+    for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
+      let v = 0; for (let d = -r; d <= r && !v; d++) { const xx = x + d; if (xx >= 0 && xx < w && m[y * w + xx]) v = 1; }
+      t[y * w + x] = v;
+    }
+    for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
+      let v = 0; for (let d = -r; d <= r && !v; d++) { const yy = y + d; if (yy >= 0 && yy < h && t[yy * w + x]) v = 1; }
+      o[y * w + x] = v;
+    }
+    return o;
+  }
+  function fillHoles(m, w, h) {
+    const out = new Uint8Array(w * h).fill(1), q = new Int32Array(w * h); let qh = 0, qt = 0;
+    const seen = new Uint8Array(w * h);
+    const push = i => { if (!seen[i] && !m[i]) { seen[i] = 1; q[qt++] = i; } };
+    for (let x = 0; x < w; x++) { push(x); push((h - 1) * w + x); }
+    for (let y = 0; y < h; y++) { push(y * w); push(y * w + w - 1); }
+    while (qh < qt) {
+      const i = q[qh++]; out[i] = 0; const x = i % w, y = (i / w) | 0;
+      if (x > 0) push(i - 1); if (x < w - 1) push(i + 1); if (y > 0) push(i - w); if (y < h - 1) push(i + w);
+    }
+    return out;
+  }
+  // 8-connected components; returns {labels, stats:[{area,cx,cy,x0,y0,x1,y1}]}
+  function components(m, w, h) {
+    const lab = new Int32Array(w * h), stats = [null], q = new Int32Array(w * h);
+    let n = 0;
+    for (let s = 0; s < w * h; s++) {
+      if (!m[s] || lab[s]) continue;
+      n++; let qh = 0, qt = 0; q[qt++] = s; lab[s] = n;
+      let area = 0, sx = 0, sy = 0, x0 = w, y0 = h, x1 = 0, y1 = 0;
+      while (qh < qt) {
+        const i = q[qh++], x = i % w, y = (i / w) | 0;
+        area++; sx += x; sy += y; if (x < x0) x0 = x; if (x > x1) x1 = x; if (y < y0) y0 = y; if (y > y1) y1 = y;
+        for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) {
+          const xx = x + dx, yy = y + dy; if (xx < 0 || yy < 0 || xx >= w || yy >= h) continue;
+          const j = yy * w + xx; if (m[j] && !lab[j]) { lab[j] = n; q[qt++] = j; }
+        }
+      }
+      stats.push({ area, cx: sx / area, cy: sy / area, x0, y0, x1, y1 });
+    }
+    return { labels: lab, stats, n };
+  }
+
+  // ---------- separable gaussian (reflect-101 border, like OpenCV) ----------
+  function gaussKernel(sigma) {
+    const r = Math.max(1, Math.ceil(sigma * 3)), k = new Float32Array(2 * r + 1); let s = 0;
+    for (let i = -r; i <= r; i++) { k[i + r] = Math.exp(-(i * i) / (2 * sigma * sigma)); s += k[i + r]; }
+    for (let i = 0; i < k.length; i++) k[i] /= s; return { k, r };
+  }
+  const refl = (i, n) => { if (n === 1) return 0; while (i < 0 || i >= n) { if (i < 0) i = -i; if (i >= n) i = 2 * n - 2 - i; } return i; };
+  function boxSizes(sigma, n = 3) { // box widths approximating a gaussian (Kutskir)
+    const wIdeal = Math.sqrt((12 * sigma * sigma / n) + 1); let wl = Math.floor(wIdeal); if (wl % 2 === 0) wl--;
+    const wu = wl + 2, m = Math.round((12 * sigma * sigma - n * wl * wl - 4 * n * wl - 3 * n) / (-4 * wl - 4));
+    const out = []; for (let i = 0; i < n; i++) out.push(i < m ? wl : wu); return out;
+  }
+  function boxPass(src, dst, w, h, ch, r, horiz) {
+    const len = horiz ? w : h, lines = horiz ? h : w, inv = 1 / (2 * r + 1);
+    for (let l = 0; l < lines; l++) for (let c = 0; c < ch; c++) {
+      const at = i => { const q = Math.min(len - 1, Math.max(0, i)); return horiz ? ((l * w + q) * ch + c) : ((q * w + l) * ch + c); };
+      let acc = 0; for (let i = -r; i <= r; i++) acc += src[at(i)];
+      for (let i = 0; i < len; i++) { dst[at(i)] = acc * inv; acc += src[at(i + r + 1)] - src[at(i - r)]; }
+    }
+  }
+  function fastBlur(src, w, h, sigma, ch) {
+    let a = Float32Array.from(src), b = new Float32Array(src.length);
+    for (const bw of boxSizes(sigma)) { const r = (bw - 1) >> 1; boxPass(a, b, w, h, ch, r, true); boxPass(b, a, w, h, ch, r, false); }
+    return a;
+  }
+  function blur(src, w, h, sigma, ch = 1, kernel) {
+    if (sigma <= 0 && !kernel) return Float32Array.from(src);
+    if (!kernel && sigma > 4) return fastBlur(src, w, h, sigma, ch);
+    const { k, r } = kernel || gaussKernel(sigma), tmp = new Float32Array(src.length), out = new Float32Array(src.length);
+    for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) for (let c = 0; c < ch; c++) {
+      let s = 0; for (let d = -r; d <= r; d++) s += k[d + r] * src[(y * w + refl(x + d, w)) * ch + c];
+      tmp[(y * w + x) * ch + c] = s;
+    }
+    for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) for (let c = 0; c < ch; c++) {
+      let s = 0; for (let d = -r; d <= r; d++) s += k[d + r] * tmp[(refl(y + d, h) * w + x) * ch + c];
+      out[(y * w + x) * ch + c] = s;
+    }
+    return out;
+  }
+  // OpenCV 5x5 gaussian with sigma derived from ksize (sigma=1.1)
+  const K5 = (() => { const s = 0.3 * ((5 - 1) * 0.5 - 1) + 0.8, k = new Float32Array(5); let t = 0; for (let i = -2; i <= 2; i++) { k[i + 2] = Math.exp(-i * i / (2 * s * s)); t += k[i + 2]; } for (let i = 0; i < 5; i++) k[i] /= t; return { k, r: 2 }; })();
+
+  // ---------- contour + polygon ----------
+  function traceContour(m, w, h) { // Moore-neighbour tracing of the outer boundary of the (single) blob
+    let start = -1; for (let i = 0; i < w * h; i++) if (m[i]) { start = i; break; }
+    if (start < 0) return [];
+    const dirs = [[1, 0], [1, 1], [0, 1], [-1, 1], [-1, 0], [-1, -1], [0, -1], [1, -1]];
+    const at = (x, y) => x >= 0 && y >= 0 && x < w && y < h && m[y * w + x];
+    const pts = []; let x = start % w, y = (start / w) | 0, d = 7; const sx = x, sy = y;
+    let guard = 0;
+    do {
+      pts.push([x, y]);
+      let found = false;
+      for (let k = 0; k < 8; k++) {
+        const nd = (d + 6 + k) % 8, nx = x + dirs[nd][0], ny = y + dirs[nd][1];
+        if (at(nx, ny)) { x = nx; y = ny; d = nd; found = true; break; }
+      }
+      if (!found) break;
+    } while ((x !== sx || y !== sy) && ++guard < 200000);
+    return pts;
+  }
+  function dpClosed(pts, eps) {
+    const n = pts.length; if (n < 3) return pts.slice();
+    let far = 0, fd = -1; for (let i = 0; i < n; i++) { const d = norm(sub(pts[i], pts[0])); if (d > fd) { fd = d; far = i; } }
+    const keep = new Uint8Array(n); keep[0] = keep[far] = 1;
+    const rec = (a, b) => { // indices along closed ring a->b
+      const len = (b - a + n) % n; if (len < 2) return;
+      const P = pts[a], Q = pts[b], v = sub(Q, P), L = norm(v) || 1;
+      let bi = -1, bd = -1;
+      for (let t = 1; t < len; t++) { const i = (a + t) % n, wv = sub(pts[i], P); const d = Math.abs(v[0] * wv[1] - v[1] * wv[0]) / L; if (d > bd) { bd = d; bi = i; } }
+      if (bd > eps) { keep[bi] = 1; rec(a, bi); rec(bi, b); }
+    };
+    rec(0, far); rec(far, 0);
+    const out = []; for (let i = 0; i < n; i++) if (keep[i]) out.push(pts[i]); return out;
+  }
+  function polygon5(cont) {
+    let peri = 0; for (let i = 0; i < cont.length; i++) peri += norm(sub(cont[(i + 1) % cont.length], cont[i]));
+    let lo = 0.001, hi = 0.1, p = null;
+    for (let k = 0; k < 60; k++) { const e = (lo + hi) / 2; p = dpClosed(cont, e * peri); if (p.length > 5) lo = e; else if (p.length < 5) hi = e; else break; }
+    return p;
+  }
+  function labelCorners(p) {
+    const close = (a, b) => Math.abs(a[0] - b[0]) < 1e-6 && Math.abs(a[1] - b[1]) < 1e-6;
+    const argmin = (arr, f) => arr.reduce((b, q) => (f(q) < f(b) ? q : b), arr[0]);
+    const TL = argmin(p, q => q[0] + q[1]), TR = argmin(p, q => q[1] - q[0]);
+    let rest = p.filter(q => !close(q, TL) && !close(q, TR));
+    const BL = argmin(rest, q => q[0] - q[1]); rest = rest.filter(q => !close(q, BL));
+    const BR = rest.length === 2 ? argmin(rest, q => q[1] - q[0] * 0.5) : argmin(rest, q => -q[0]);
+    rest = rest.filter(q => !close(q, BR));
+    if (!rest.length) throw new Error('shape');
+    return { TL, TR, BL, BR, K: rest[0] };
+  }
+
+  // ---------- TPS (scipy RBFInterpolator thin_plate_spline, degree 1, smoothing) ----------
+  function solve(A, b) { // gaussian elimination with partial pivoting; A n×n, b n×m
+    const n = A.length, m = b[0].length, M = A.map((r, i) => r.concat(b[i]));
+    for (let c = 0; c < n; c++) {
+      let piv = c; for (let r = c + 1; r < n; r++) if (Math.abs(M[r][c]) > Math.abs(M[piv][c])) piv = r;
+      [M[c], M[piv]] = [M[piv], M[c]];
+      const d = M[c][c]; if (Math.abs(d) < 1e-12) throw new Error('singular');
+      for (let r = 0; r < n; r++) if (r !== c) { const f = M[r][c] / d; if (f) for (let k = c; k < n + m; k++) M[r][k] -= f * M[c][k]; }
+    }
+    return M.map((r, i) => r.slice(n).map(v => v / M[i][i]));
+  }
+  const phi = r => (r > 0 ? r * r * Math.log(r) : 0);
+  function tps(src, dst, smoothing = 0.5) {
+    const n = src.length, N = n + 3, A = [];
+    for (let i = 0; i < N; i++) A.push(new Array(N).fill(0));
+    for (let i = 0; i < n; i++) {
+      for (let j = 0; j < n; j++) A[i][j] = phi(norm(sub(src[i], src[j])));
+      A[i][i] += smoothing;
+      A[i][n] = 1; A[i][n + 1] = src[i][0]; A[i][n + 2] = src[i][1];
+      A[n][i] = 1; A[n + 1][i] = src[i][0]; A[n + 2][i] = src[i][1];
+    }
+    const B = []; for (let i = 0; i < N; i++) B.push(i < n ? [dst[i][0], dst[i][1]] : [0, 0]);
+    const W = solve(A, B);
+    const sx = Float64Array.from(src, p => p[0]), sy = Float64Array.from(src, p => p[1]);
+    const wx = Float64Array.from(W, r => r[0]), wy = Float64Array.from(W, r => r[1]);
+    return (x, y) => {
+      let ox = wx[n] + wx[n + 1] * x + wx[n + 2] * y, oy = wy[n] + wy[n + 1] * x + wy[n + 2] * y;
+      for (let i = 0; i < n; i++) { const dx = x - sx[i], dy = y - sy[i], r2 = dx * dx + dy * dy; if (r2 > 0) { const f = 0.5 * r2 * Math.log(r2); ox += wx[i] * f; oy += wy[i] * f; } }
+      return [ox, oy];
+    };
+  }
+
+  // ---------- feature detection on the photo ----------
+  function findOld(img, W, H) {
+    const s = H / 1280, x0 = Math.floor(250 * s), y0 = Math.floor(850 * s), x1 = Math.floor(560 * s), y1 = Math.floor(1200 * s);
+    const w = x1 - x0, h = y1 - y0, m = new Uint8Array(w * h);
+    for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
+      const i = ((y + y0) * W + (x + x0)) * 4; m[y * w + x] = Math.max(img[i], img[i + 1], img[i + 2]) > 90 ? 1 : 0;
+    }
+    const cc = components(m, w, h);
+    let best = 0; for (let i = 1; i <= cc.n; i++) if (!best || cc.stats[i].area > cc.stats[best].area) best = i;
+    if (!best || cc.stats[best].area < 1500 * s * s) throw new Error('no-crest');
+    const blob = new Uint8Array(w * h); for (let i = 0; i < w * h; i++) blob[i] = cc.labels[i] === best ? 1 : 0;
+    return { mask: fillHoles(blob, w, h), x0, y0, w, h };
+  }
+  function feats(img, W, old) {
+    const { mask, x0, y0, w, h } = old;
+    const cont = traceContour(mask, w, h).map(p => [p[0] + x0, p[1] + y0]);
+    const L = refineCorners(contourCorners(cont), cont);
+    // stars: bright blobs inside the eroded crest, lower 70% of the crest
+    const ks = Math.min(4, Math.max(0.5, (norm(sub(L.TR, L.TL)) + norm(sub(L.BR, L.BL))) / 2 / 155));
+    const er = erodeCross(mask, w, h, Math.max(2, Math.round(3 * ks))), mins = [];
+    let yMin = h, yMax = 0;
+    for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) { const i = y * w + x; if (!mask[i]) continue; if (y < yMin) yMin = y; if (y > yMax) yMax = y; const j = ((y + y0) * W + x + x0) * 4; mins.push(Math.min(img[j], img[j + 1], img[j + 2])); }
+    const thr = 0.55 * percentile(mins, 99), bright = new Uint8Array(w * h);
+    // a team crest (Stifel or Toyota) is much taller relative to its width than the plain US crest
+    const aspect = (norm(sub(L.BL, L.TL)) + norm(sub(L.BR, L.TR))) / (norm(sub(L.TR, L.TL)) + norm(sub(L.BR, L.BL)));
+    if (aspect > ALREADY_ASPECT) throw new Error('already');
+    for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) { const i = y * w + x; if (!er[i]) continue; const j = ((y + y0) * W + x + x0) * 4; bright[i] = Math.min(img[j], img[j + 1], img[j + 2]) > thr ? 1 : 0; }
+    const cc = components(bright, w, h), cand = [];
+    for (let i = 1; i <= cc.n; i++) { const st = cc.stats[i]; if (st.cy < yMin + 0.3 * (yMax - yMin) || st.area < 20 * ks * ks) continue; cand.push(st); }
+    cand.sort((a, b) => a.area - b.area);
+    let bestR = Infinity, trio = null;
+    for (let i = 0; i + 2 < cand.length; i++) { const g = cand.slice(i, i + 3), r = g[2].area / g[0].area; if (r < bestR) { bestR = r; trio = g; } }
+    if (!trio || bestR > 2.5) throw new Error('no-stars');
+    const S = trio.map(t => [t.cx + x0, t.cy + y0]).sort((a, b) => a[0] - b[0]);
+    // sanity: stars sit inside the crest, roughly in a row and evenly spaced
+    const sp1 = S[1][0] - S[0][0], sp2 = S[2][0] - S[1][0];
+    if (sp1 <= 0 || sp2 <= 0 || Math.max(sp1, sp2) / Math.min(sp1, sp2) > 1.6) throw new Error('no-stars');
+    return { L, S, cont, ks };
+  }
+
+  // Corners as extreme points of the outline (rotation-tolerant), K = bottom point farthest below the BL–BR line
+  function contourCorners(c) {
+    const arg = f => c.reduce((b, q) => (f(q) < f(b) ? q : b), c[0]);
+    const TL = arg(q => q[0] + q[1]), TR = arg(q => q[1] - q[0]), BL = arg(q => q[0] - q[1]), BR = arg(q => -(q[0] + q[1]));
+    const A = arc(c, BL, BR, TL), v = unit(sub(BR, BL)), nrm = [-v[1], v[0]]; // nrm points down-ish (y grows)
+    let K = A.seg[0], kd = -Infinity;
+    A.seg.forEach(p => { const d = dot(sub(p, BL), nrm); if (d > kd) { kd = d; K = p; } });
+    if (kd < 2) throw new Error('shape');
+    return { TL, TR, BL, BR, K };
+  }
+
+  // Corners as intersections of straight-line fits to the edges (robust to soft/rounded corners)
+  function lineFit(pts) {
+    let mx = 0, my = 0; pts.forEach(p => { mx += p[0]; my += p[1]; }); mx /= pts.length; my /= pts.length;
+    let sxx = 0, syy = 0, sxy = 0; pts.forEach(p => { const dx = p[0] - mx, dy = p[1] - my; sxx += dx * dx; syy += dy * dy; sxy += dx * dy; });
+    const ang = 0.5 * Math.atan2(2 * sxy, sxx - syy); return { m: [mx, my], d: [Math.cos(ang), Math.sin(ang)] };
+  }
+  function intersect(a, b) {
+    const det = a.d[0] * -b.d[1] - -b.d[0] * a.d[1]; if (Math.abs(det) < 1e-6) return null;
+    const rx = b.m[0] - a.m[0], ry = b.m[1] - a.m[1], t = (rx * -b.d[1] - -b.d[0] * ry) / det;
+    return [a.m[0] + t * a.d[0], a.m[1] + t * a.d[1]];
+  }
+  function refineCorners(L, c) {
+    const edge = (a, b, av) => { const A = arc(c, L[a], L[b], L[av]), pts = A.seg.filter((_, i) => A.s[i] > 0.15 && A.s[i] < 0.85); return pts.length >= 4 ? lineFit(pts) : null; };
+    const top = edge('TL', 'TR', 'BL'), left = edge('TL', 'BL', 'TR'), right = edge('TR', 'BR', 'TL'), bl = edge('BL', 'K', 'TR'), br = edge('K', 'BR', 'TL');
+    const R = { ...L }, set = (k, p) => { if (p && norm(sub(p, L[k])) < 25) R[k] = p; };
+    if (top && left) set('TL', intersect(top, left));
+    if (top && right) set('TR', intersect(top, right));
+    if (left && bl) set('BL', intersect(left, bl));
+    if (right && br) set('BR', intersect(right, br));
+    if (bl && br) set('K', intersect(bl, br));
+    return R;
+  }
+
+  // ---------- control points (same rules as the Python version) ----------
+  function nearestIdx(c, p) { let b = 0, bd = Infinity; for (let i = 0; i < c.length; i++) { const d = (c[i][0] - p[0]) ** 2 + (c[i][1] - p[1]) ** 2; if (d < bd) { bd = d; b = i; } } return b; }
+  function arc(c, a, b, avoid) {
+    const n = c.length, i = nearestIdx(c, a), j = nearestIdx(c, b), k = nearestIdx(c, avoid);
+    let f = []; for (let t = 0; t <= (j - i + n) % n; t++) f.push((i + t) % n);
+    if (f.includes(k)) { f = []; for (let t = 0; t <= (i - j + n) % n; t++) f.push((i - t + n) % n); }
+    const seg = f.map(q => c[q]), d = [0];
+    for (let q = 1; q < seg.length; q++) d.push(d[q - 1] + norm(sub(seg[q], seg[q - 1])));
+    const tot = d[d.length - 1] || 1; return { seg, s: d.map(v => v / tot) };
+  }
+  function sampleArc({ seg, s }, t) {
+    let q = 1; while (q < s.length - 1 && s[q] < t) q++;
+    const a = s[q - 1], b = s[q], u = b > a ? (t - a) / (b - a) : 0;
+    return add(seg[q - 1], mul(sub(seg[q], seg[q - 1]), Math.min(1, Math.max(0, u))));
+  }
+  const lerp = (a, b, t) => add(a, mul(sub(b, a), t));
+  function fitDir(pts, ref) {
+    let mx = 0, my = 0; pts.forEach(p => { mx += p[0]; my += p[1]; }); mx /= pts.length; my /= pts.length;
+    let sxx = 0, syy = 0, sxy = 0; pts.forEach(p => { const dx = p[0] - mx, dy = p[1] - my; sxx += dx * dx; syy += dy * dy; sxy += dx * dy; });
+    const ang = 0.5 * Math.atan2(2 * sxy, sxx - syy); let d = [Math.cos(ang), Math.sin(ang)];
+    return dot(d, ref) > 0 ? d : mul(d, -1);
+  }
+  function controlPoints(F) {
+    // Edges are placed as STRAIGHT lines between the measured corners (each corner is itself the intersection of
+    // straight-line fits to the print's edges). Following the traced outline copied its jaggedness into the new
+    // crest on soft-focus photos, so it is no longer used for the edges.
+    const { L, S } = F, Lt = T.Lt;
+    const src = [...T.St, Lt.BL, Lt.K, Lt.BR, T.TL_F, T.TR_F], dst = [...S, L.BL, L.K, L.BR, L.TL, L.TR];
+    const ts = [0.2, 0.4, 0.6, 0.8];
+    [['TL', 'BL', T.TL_F, Lt.BL], ['TR', 'BR', T.TR_F, Lt.BR]].forEach(([a, b, fa, fb]) => {
+      ts.forEach(t => { dst.push(lerp(L[a], L[b], t)); src.push(lerp(fa, fb, t)); });
+    });
+    [0.33, 0.67].forEach(t => { dst.push(lerp(L.TL, L.TR, t)); src.push(lerp(T.TL_F, T.TR_F, t)); });
+    dst.push(lerp(L.BL, L.K, 0.5)); src.push(lerp(Lt.BL, Lt.K, 0.5));
+    dst.push(lerp(L.K, L.BR, 0.5)); src.push(lerp(Lt.K, Lt.BR, 0.5));
+    // extend each side straight up along its own edge line to the taller team crest's top corners
+    [['TL', 'BL', T.TL_F, Lt.TL, Lt.BL], ['TR', 'BR', T.TR_F, Lt.TR, Lt.BR]].forEach(([a, b, fa, ft, fb]) => {
+      const ref = sub(L[a], L[b]), d = unit(ref), sc = norm(ref) / norm(sub(fa, fb)), ext = norm(sub(ft, fa)) * sc;
+      dst.push(add(L[a], mul(d, ext))); src.push(ft);
+      dst.push(add(L[a], mul(d, ext * 0.5))); src.push(lerp(fa, ft, 0.5));
+    });
+    // top edge of the team crest: straight between its two new corners
+    const nTL = dst[dst.length - 4], nTR = dst[dst.length - 2];
+    [0.33, 0.67].forEach(t => { dst.push(lerp(nTL, nTR, t)); src.push(lerp(Lt.TL, Lt.TR, t)); });
+    return { src, dst };
+  }
+
+  // Original (v1.2) edge rules: edges follow the traced outline of the old print, and the taller top continues
+  // each edge's local direction near the top. Keeps small bends from folds; can look wavy on soft-focus photos.
+  function controlPointsTraced(F) {
+    const { L, S, cont: c } = F, Lt = T.Lt;
+    const src = [...T.St, Lt.BL, Lt.K, Lt.BR, T.TL_F, T.TR_F], dst = [...S, L.BL, L.K, L.BR, L.TL, L.TR];
+    const ts = [0.2, 0.4, 0.6, 0.8];
+    [['TL', 'BL', 'TR', T.TL_F, Lt.BL], ['TR', 'BR', 'TL', T.TR_F, Lt.BR]].forEach(([a, b, av, fa, fb]) => {
+      const A = arc(c, L[a], L[b], L[av]); ts.forEach(t => { dst.push(sampleArc(A, t)); src.push(lerp(fa, fb, t)); });
+    });
+    let A = arc(c, L.TL, L.TR, L.BL); [0.33, 0.67].forEach(t => { dst.push(sampleArc(A, t)); src.push(lerp(T.TL_F, T.TR_F, t)); });
+    A = arc(c, L.BL, L.K, L.TR); dst.push(sampleArc(A, 0.5)); src.push(lerp(Lt.BL, Lt.K, 0.5));
+    A = arc(c, L.K, L.BR, L.TL); dst.push(sampleArc(A, 0.5)); src.push(lerp(Lt.K, Lt.BR, 0.5));
+    [['TL', 'BL', 'TR', T.TL_F, Lt.TL, Lt.BL], ['TR', 'BR', 'TL', T.TR_F, Lt.TR, Lt.BR]].forEach(([a, b, av, fa, ft, fb]) => {
+      const E = arc(c, L[a], L[b], L[av]), ref = sub(L[a], L[b]);
+      const top = E.seg.filter((_, i) => E.s[i] > 0.03 && E.s[i] < 0.4), all = E.seg.filter((_, i) => E.s[i] > 0.05 && E.s[i] < 0.95);
+      const d = unit(add(mul(fitDir(top, ref), 0.6), mul(fitDir(all, ref), 0.4)));
+      const sc = norm(ref) / norm(sub(fa, fb));
+      dst.push(add(L[a], mul(d, norm(sub(ft, fa)) * sc))); src.push(ft);
+    });
+    src.push(mul(add(Lt.TL, Lt.TR), 0.5)); dst.push(mul(add(dst[dst.length - 2], dst[dst.length - 1]), 0.5));
+    return { src, dst };
+  }
+
+  // ---------- template raster ----------
+  let TPL = null; const TPLS = {};
+  async function loadTemplate(key, svgText) {
+    const url = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svgText);
+    const im = new Image(); im.decoding = 'sync';
+    await new Promise((res, rej) => { im.onload = res; im.onerror = () => rej(new Error('template')); im.src = url; });
+    const S = 1080, cv = document.createElement('canvas'); cv.width = cv.height = S;
+    const g = cv.getContext('2d'); g.drawImage(im, 0, 0, S, S);
+    const d = g.getImageData(0, 0, S, S).data, n = S * S;
+    const rgb = new Float32Array(n * 3), a = new Float32Array(n);
+    for (let i = 0; i < n; i++) { const al = d[i * 4 + 3] / 255; a[i] = al; rgb[i * 3] = d[i * 4] * al; rgb[i * 3 + 1] = d[i * 4 + 1] * al; rgb[i * 3 + 2] = d[i * 4 + 2] * al; }
+    TPLS[key] = { rgb, a };
+  }
+  function sampleTpl(x, y, out) { // bilinear on premultiplied template, zero outside
+    const S = T.size; out[0] = out[1] = out[2] = out[3] = 0;
+    const fx = Math.floor(x), fy = Math.floor(y), ax = x - fx, ay = y - fy;
+    for (let dy = 0; dy < 2; dy++) for (let dx = 0; dx < 2; dx++) {
+      const xx = fx + dx, yy = fy + dy; if (xx < 0 || yy < 0 || xx >= S || yy >= S) continue;
+      const wgt = (dx ? ax : 1 - ax) * (dy ? ay : 1 - ay), i = yy * S + xx;
+      out[0] += wgt * TPL.rgb[i * 3]; out[1] += wgt * TPL.rgb[i * 3 + 1]; out[2] += wgt * TPL.rgb[i * 3 + 2]; out[3] += wgt * TPL.a[i];
+    }
+  }
+
+  // ---------- main ----------
+  async function process(img, W, H, onStep = () => {}, crestKey = 'stifel', opts = {}) {
+    const edges = opts.edges === 'traced' ? 'traced' : 'straight';
+    if (!TPLS[crestKey] || !GEOMS[crestKey]) throw new Error('template');
+    TPL = TPLS[crestKey]; T = GEOMS[crestKey];
+    onStep('Finding the crest');
+    const old = findOld(img, W, H), F = feats(img, W, old);
+    const { src, dst } = edges === 'traced' ? controlPointsTraced(F) : controlPoints(F);
+    const fwd = tps(src, dst), inv = tps(dst, src);
+    const k = F.ks, ri = v => Math.max(1, Math.round(v * k)); // crest scale vs the 2576px studio files
+    await tick(); onStep('Fitting the new crest to the shirt');
+    const corners = [[T.TX0 - 10, T.TY0 - 10], [T.TX1 + 10, T.TY0 - 10], [T.TX0 - 10, T.TY1 + 10], [T.TX1 + 10, T.TY1 + 10]].map(p => fwd(p[0], p[1]));
+    const x0 = Math.max(0, Math.floor(Math.min(...corners.map(p => p[0]))) - ri(6)), y0 = Math.max(0, Math.floor(Math.min(...corners.map(p => p[1]))) - ri(6));
+    const x1 = Math.min(W, Math.ceil(Math.max(...corners.map(p => p[0]))) + ri(6)), y1 = Math.min(H, Math.ceil(Math.max(...corners.map(p => p[1]))) + ri(6));
+    const w = x1 - x0, h = y1 - y0, N = w * h;
+    // inverse map on the pixel-corner lattice, bilinearly interpolated for 3x supersampling
+    const gw = w + 1, gh = h + 1, mapX = new Float32Array(gw * gh), mapY = new Float32Array(gw * gh);
+    for (let y = 0; y < gh; y++) for (let x = 0; x < gw; x++) { const q = inv(x0 + x - 0.5, y0 + y - 0.5); mapX[y * gw + x] = q[0]; mapY[y * gw + x] = q[1]; }
+    const SS = 3, pm = new Float32Array(N * 3), alpha = new Float32Array(N), myd = new Float32Array(N), smp = new Float32Array(4);
+    for (let y = 0; y < h; y++) {
+      for (let x = 0; x < w; x++) {
+        let r = 0, g = 0, b = 0, a = 0, yy = 0;
+        for (let sy = 0; sy < SS; sy++) for (let sx = 0; sx < SS; sx++) {
+          const u = (sx + 0.5) / SS, v = (sy + 0.5) / SS, i00 = y * gw + x;
+          const tx = (1 - u) * (1 - v) * mapX[i00] + u * (1 - v) * mapX[i00 + 1] + (1 - u) * v * mapX[i00 + gw] + u * v * mapX[i00 + gw + 1];
+          const ty = (1 - u) * (1 - v) * mapY[i00] + u * (1 - v) * mapY[i00 + 1] + (1 - u) * v * mapY[i00 + gw] + u * v * mapY[i00 + gw + 1];
+          sampleTpl(tx, ty, smp); r += smp[0]; g += smp[1]; b += smp[2]; a += smp[3]; yy += ty;
+        }
+        const i = y * w + x, k = SS * SS; pm[i * 3] = r / k; pm[i * 3 + 1] = g / k; pm[i * 3 + 2] = b / k; alpha[i] = a / k; myd[i] = yy / k;
+      }
+      if (y % 64 === 0) await tick();
+    }
+    const crest = new Float32Array(N * 3);
+    for (let i = 0; i < N; i++) { const a = Math.max(alpha[i], 1e-3); crest[i * 3] = pm[i * 3] / a; crest[i * 3 + 1] = pm[i * 3 + 1] / a; crest[i * 3 + 2] = pm[i * 3 + 2] / a; }
+    // ROI of the photo + old-crest mask in ROI coords
+    const tgt = new Float32Array(N * 3), omr = new Uint8Array(N);
+    for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
+      const i = y * w + x, j = ((y + y0) * W + x + x0) * 4; tgt[i * 3] = img[j]; tgt[i * 3 + 1] = img[j + 1]; tgt[i * 3 + 2] = img[j + 2];
+      const ox = x + x0 - old.x0, oy = y + y0 - old.y0; if (ox >= 0 && oy >= 0 && ox < old.w && oy < old.h) omr[i] = old.mask[oy * old.w + ox];
+    }
+    await tick(); onStep('Matching the print, light and fabric');
+    // 1) shading + fabric texture from the old print's whites
+    const lt = new Float32Array(N), sat = new Float32Array(N);
+    for (let i = 0; i < N; i++) { const r = tgt[i * 3], g = tgt[i * 3 + 1], b = tgt[i * 3 + 2]; lt[i] = r * lumW[0] + g * lumW[1] + b * lumW[2]; sat[i] = Math.max(r, g, b) - Math.min(r, g, b); }
+    const inner = erodeCross(omr, w, h, ri(4)), innerL = []; for (let i = 0; i < N; i++) if (inner[i]) innerL.push(lt[i]);
+    const ref = percentile(innerL, 97);
+    let white = new Uint8Array(N); for (let i = 0; i < N; i++) white[i] = inner[i] && lt[i] > 0.55 * ref && sat[i] < 0.25 * ref ? 1 : 0;
+    white = erodeCross(white, w, h, ri(2));
+    const ratio = new Float32Array(N), wgt = new Float32Array(N), wl = new Float32Array(N);
+    for (let i = 0; i < N; i++) if (white[i]) { ratio[i] = lt[i] / ref; wgt[i] = 1; wl[i] = lt[i]; }
+    const nc = (img1, sig) => { const a = blur(img1, w, h, sig), b = blur(wgt, w, h, sig), o = new Float32Array(N); for (let i = 0; i < N; i++) o[i] = a[i] / Math.max(b[i], 1e-4); return [o, b]; };
+    const [s1, b1] = nc(ratio, 8 * k), [s2, b2] = nc(ratio, 30 * k), [loc] = nc(wl, 2 * k), wb = blur(wgt, w, h, 1.5 * k);
+    // where no print white is nearby (the taller top of the new crest), fall back to the print's average light
+    let rs = 0, rn = 0; for (let i = 0; i < N; i++) if (white[i]) { rs += ratio[i]; rn++; } const meanR = rn ? rs / rn : 1;
+    const shadeLo = new Float32Array(N), tex = new Float32Array(N);
+    for (let i = 0; i < N; i++) {
+      const t = Math.min(1, Math.max(0, b1[i] / 0.2)), t2 = Math.min(1, Math.max(0, b2[i] / 0.05));
+      const far = t2 * s2[i] + (1 - t2) * meanR;
+      shadeLo[i] = Math.min(1.2, Math.max(0.5, t * s1[i] + (1 - t) * far));
+      const hp = white[i] ? lt[i] / Math.max(loc[i], 1) : 1;
+      tex[i] = 1 + (Math.min(1.15, Math.max(0.85, hp)) - 1) * Math.min(1, Math.max(0, wb[i] * 1.5));
+    }
+    await tick();
+    // 2) colour response fitted on the shared lower panel
+    const core = erodeCross(omr, w, h, ri(6)), lowY = T.St[0][1] - 0.06 * T.SH;
+    const gray = new Float32Array(N); for (let i = 0; i < N; i++) gray[i] = Math.round(Math.min(255, Math.max(0, crest[i * 3])) * lumW[0] + Math.min(255, Math.max(0, crest[i * 3 + 1])) * lumW[1] + Math.min(255, Math.max(0, crest[i * 3 + 2])) * lumW[2]);
+    const lap = new Float32Array(N);
+    for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
+      const g = (xx, yy) => gray[refl(yy, h) * w + refl(xx, w)];
+      lap[y * w + x] = 2 * (g(x - 1, y - 1) + g(x + 1, y - 1) + g(x - 1, y + 1) + g(x + 1, y + 1)) - 8 * g(x, y);
+    }
+    const lapB = blur(lap, w, h, 0, 1, K5), lower = new Uint8Array(N);
+    const XtX = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]], XtY = [[0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]];
+    let nsel = 0;
+    for (let i = 0; i < N; i++) {
+      lower[i] = myd[i] > lowY && myd[i] < T.TY1 ? 1 : 0;
+      if (!(core[i] && lower[i] && Math.abs(lapB[i]) < 6 && alpha[i] > 0.99)) continue;
+      const xv = [crest[i * 3], crest[i * 3 + 1], crest[i * 3 + 2], 1], yv = [tgt[i * 3] / shadeLo[i], tgt[i * 3 + 1] / shadeLo[i], tgt[i * 3 + 2] / shadeLo[i]];
+      for (let a = 0; a < 4; a++) { for (let b = 0; b < 4; b++) XtX[a][b] += xv[a] * xv[b]; for (let c = 0; c < 3; c++) XtY[a][c] += xv[a] * yv[c]; }
+      nsel++;
+    }
+    if (nsel < 200) throw new Error('colour');
+    const Mx = solve(XtX, XtY);
+    const out = new Float32Array(N * 3);
+    for (let i = 0; i < N; i++) {
+      const c0 = crest[i * 3], c1 = crest[i * 3 + 1], c2 = crest[i * 3 + 2];
+      let m = [0, 1, 2].map(k => c0 * Mx[0][k] + c1 * Mx[1][k] + c2 * Mx[2][k] + Mx[3][k]);
+      if ((c0 - c1) < 45 && Math.min(c0, c1, c2) > 110) { const L = m[0] * lumW[0] + m[1] * lumW[1] + m[2] * lumW[2]; m = m.map(v => v * 0.15 + L * 0.85); }
+      const s = shadeLo[i] * tex[i];
+      for (let k = 0; k < 3; k++) out[i * 3 + k] = Math.min(255, Math.max(0, m[k] * s));
+    }
+    await tick(); onStep('Removing the old crest');
+    // 3) fill the old print (dilated) from the surrounding shirt, multi-scale normalised convolution
+    const hole = dilateSquare(omr, w, h, ri(4)), known = new Float32Array(N), kv = new Float32Array(N * 3);
+    for (let i = 0; i < N; i++) if (!hole[i]) { known[i] = 1; kv[i * 3] = tgt[i * 3]; kv[i * 3 + 1] = tgt[i * 3 + 1]; kv[i * 3 + 2] = tgt[i * 3 + 2]; }
+    const base = Float32Array.from(tgt);
+    for (const sig of [24, 12, 6, 3].map(v => v * k)) {
+      const a = blur(kv, w, h, sig, 3), b = blur(known, w, h, sig);
+      for (let i = 0; i < N; i++) if (hole[i] && b[i] > (sig === 24 * k ? 1e-9 : 0.25)) for (let k = 0; k < 3; k++) base[i * 3 + k] = a[i * 3 + k] / b[i];
+      await tick();
+    }
+    onStep('Matching focus');
+    // 4) focus: match the photo's edge sharpness over the shared lower panel
+    const region = (() => { const a = new Uint8Array(N); for (let i = 0; i < N; i++) a[i] = lower[i] && alpha[i] > 0.5 ? 1 : 0; const d1 = dilateCross(a, w, h, ri(4)), d2 = dilateCross(omr, w, h, ri(3)); for (let i = 0; i < N; i++) a[i] = d1[i] && d2[i]; return a; })();
+    const sharp = rgb => {
+      const g = new Float32Array(N); for (let i = 0; i < N; i++) g[i] = Math.round(Math.min(255, Math.max(0, rgb[i * 3])) * lumW[0] + Math.min(255, Math.max(0, rgb[i * 3 + 1])) * lumW[1] + Math.min(255, Math.max(0, rgb[i * 3 + 2])) * lumW[2]);
+      const vals = [];
+      for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
+        if (!region[y * w + x]) continue; const G = (xx, yy) => g[refl(yy, h) * w + refl(xx, w)];
+        const gx = (G(x + 1, y - 1) + 2 * G(x + 1, y) + G(x + 1, y + 1)) - (G(x - 1, y - 1) + 2 * G(x - 1, y) + G(x - 1, y + 1));
+        const gy = (G(x - 1, y + 1) + 2 * G(x, y + 1) + G(x + 1, y + 1)) - (G(x - 1, y - 1) + 2 * G(x, y - 1) + G(x + 1, y - 1));
+        vals.push(Math.hypot(gx, gy));
+      }
+      return percentile(vals, 97);
+    };
+    const target = sharp(tgt), pc0 = new Float32Array(N * 3); for (let i = 0; i < N; i++) for (let k = 0; k < 3; k++) pc0[i * 3 + k] = out[i * 3 + k] * alpha[i];
+    let best = null;
+    for (const sig of [0, 0.3, 0.5, 0.7, 0.9, 1.1, 1.3, 1.6, 2.0].map(v => v * k)) {
+      const pc = sig > 0 ? blur(pc0, w, h, sig, 3) : pc0, pa = sig > 0 ? blur(alpha, w, h, sig) : alpha, cand = new Float32Array(N * 3);
+      for (let i = 0; i < N; i++) for (let k = 0; k < 3; k++) cand[i * 3 + k] = base[i * 3 + k] * (1 - pa[i]) + pc[i * 3 + k];
+      const e = Math.abs(sharp(cand) - target); if (!best || e < best.e) best = { e, sig, cand };
+      await tick();
+    }
+    // write back into a copy of the photo
+    const res = new Uint8ClampedArray(img);
+    for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) { const i = y * w + x, j = ((y + y0) * W + x + x0) * 4; res[j] = best.cand[i * 3]; res[j + 1] = best.cand[i * 3 + 1]; res[j + 2] = best.cand[i * 3 + 2]; }
+    return { pixels: res, roi: [x0, y0, x1, y1], focus: best.sig, scale: k, edges };
+  }
+
+  // ---------- JPEG helpers: keep the source's ICC profile, set DPI ----------
+  function iccSegments(bytes) {
+    const segs = []; let p = 2;
+    while (p + 4 < bytes.length && bytes[p] === 0xFF) {
+      const mk = bytes[p + 1], len = (bytes[p + 2] << 8) | bytes[p + 3];
+      if (mk === 0xDA) break;
+      if (mk === 0xE2 && String.fromCharCode(...bytes.slice(p + 4, p + 15)) === 'ICC_PROFILE') segs.push(bytes.slice(p, p + 2 + len));
+      p += 2 + len;
+    }
+    return segs;
+  }
+  function finishJpeg(bytes, icc, dpi) {
+    // locate APP0 JFIF (canvas encoders write it first) and set density; insert ICC after it
+    let p = 2, out = [bytes.slice(0, 2)];
+    if (bytes[2] === 0xFF && bytes[3] === 0xE0) {
+      const len = (bytes[4] << 8) | bytes[5], app0 = bytes.slice(2, 4 + len);
+      if (dpi && String.fromCharCode(...app0.slice(4, 8)) === 'JFIF') { app0[11] = 1; app0[12] = dpi >> 8; app0[13] = dpi & 255; app0[14] = dpi >> 8; app0[15] = dpi & 255; }
+      out.push(app0); p = 4 + len;
+    }
+    icc.forEach(s => out.push(s));
+    // drop any ICC profile the canvas encoder wrote itself (keep only the source's), then copy the rest
+    while (p + 4 < bytes.length && bytes[p] === 0xFF && bytes[p + 1] !== 0xDA) {
+      const len = (bytes[p + 2] << 8) | bytes[p + 3];
+      const isIcc = bytes[p + 1] === 0xE2 && String.fromCharCode(...bytes.slice(p + 4, p + 15)) === 'ICC_PROFILE';
+      if (!(isIcc && icc.length)) out.push(bytes.slice(p, p + 2 + len));
+      p += 2 + len;
+    }
+    out.push(bytes.slice(p));
+    const total = out.reduce((n, a) => n + a.length, 0), buf = new Uint8Array(total); let o = 0; out.forEach(a => { buf.set(a, o); o += a.length; });
+    return buf;
+  }
+
+  return { loadTemplate, process, iccSegments, finishJpeg, crests: Object.keys(GEOMS) };
+})();
+</script>
+<script>
+(() => {
+  // ---- release info: bump APP_VERSION and PUBLISHED on every publish ----
+  const APP_VERSION = '1.7', PUBLISHED = '2026-10-10';
+  // ---- settings for self-hosting (GitHub Pages etc.) ----
+  // Paste your Smartsheet (or Microsoft Forms) feedback form link between the quotes. Leave empty to hide feedback.
+  const FEEDBACK_URL = '';
+  // Optional: the name of a text field on that form to pre-fill with the photo details (Smartsheet supports this).
+  const FEEDBACK_FIELD = 'Details';
+  const ON_CLAUDE = !!(window.claude && typeof window.claude.use === 'function');
+  const ENGINE_VERSION = `${APP_VERSION} (${PUBLISHED})`;
+  const vParts = v => String(v).split('.').map(n => parseInt(n, 10) || 0);
+  const newer = (a, b) => { const x = vParts(a), y = vParts(b); for (let i = 0; i < Math.max(x.length, y.length); i++) { if ((x[i] || 0) !== (y[i] || 0)) return (x[i] || 0) > (y[i] || 0); } return false; };
+  const CRESTS = {
+    stifel: { name: 'Stifel U.S. Ski Team', suffix: 'Stifel' },
+    toyota: { name: 'Toyota U.S. Snowboard Team', suffix: 'Toyota' },
+  };
+  const $ = s => document.querySelector(s);
+  const list = $('#list'), empty = $('#empty'), allBtn = $('#all'), dlNote = $('#dl-note'), pick = $('#pick'), need = $('#need');
+  const done = []; // {base, suffix, full, large}
+  let downloads = null, db = null, user = null, queue = Promise.resolve(), crest = null, edges = 'straight';
+  const EDGES = { straight: { name: 'Straight edges', tag: '' }, traced: { name: 'Traced edges', tag: '_Traced' } };
+  document.querySelectorAll('input[name="edges"]').forEach(r => r.addEventListener('change', () => { edges = r.value; }));
+  const ready = Promise.all([
+    CrestEngine.loadTemplate('stifel', $('#crest-stifel').textContent),
+    CrestEngine.loadTemplate('toyota', $('#crest-toyota').textContent),
+  ]);
+
+  // ---- capabilities (resolve later, may be null) ----
+  if (window.claude && typeof window.claude.use === 'function') {
+    window.claude.use('downloads').then(d => { downloads = d; refreshButtons(); }).catch(() => {});
+    window.claude.use('db').then(d => { db = d; }).catch(() => {});
+    window.claude.use('user').then(u => { user = u; }).catch(() => {});
+  }
+  function refreshButtons() {
+    const on = !!downloads || !ON_CLAUDE;
+    document.querySelectorAll('[data-dl]').forEach(b => b.disabled = !on);
+    allBtn.hidden = !(on && done.length >= 2 && window.JSZip);
+    dlNote.hidden = on || !done.length;
+    if (!on) dlNote.textContent = 'Saving files works when this page is opened in Claude. You can still right-click a preview to save it.';
+  }
+  async function save(filename, data) {
+    if (!ON_CLAUDE) { const u = URL.createObjectURL(data), a = document.createElement('a'); a.href = u; a.download = filename; document.body.append(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(u), 60000); return; }
+    if (!downloads) return;
+    try { await downloads.save({ filename, data }); }
+    catch (e) { if (e && e.code === 'rate_limited') setTimeout(() => save(filename, data), 1500); else if (e && e.code !== 'declined') console.warn(e); }
+  }
+
+  // ---- crest choice gates adding photos ----
+  document.querySelectorAll('input[name="crest"]').forEach(r => r.addEventListener('change', () => {
+    crest = r.value; pick.disabled = false; need.textContent = `New photos get the ${CRESTS[crest].name} crest. Or drag them here.`;
+  }));
+
+  const messages = {
+    'no-crest': "Couldn't find the U.S. Ski Team crest. This works on square studio headshots with the crest on the left chest.",
+    'no-stars': "Found the crest but couldn't read it clearly. Something may be covering it.",
+    'shape': "Found the crest but couldn't read its outline.",
+    'colour': "Found the crest but too little of it is visible to match the print.",
+    'already': 'This photo already has a team crest.',
+    'decode': "This file couldn't be opened as an image. Use a JPG or PNG.",
+  };
+
+  function addFiles(files) {
+    if (!crest) { need.textContent = 'Pick a team crest first, then add the photos again.'; return; }
+    const key = crest, mode = edges;
+    [...files].filter(f => /^image\/(jpeg|png)$/.test(f.type) || /\.(jpe?g|png)$/i.test(f.name)).forEach(f => addJob(f, key, mode));
+  }
+  function addJob(f, key, mode) {
+    const card = makeCard(f.name, key, mode);
+    queue = queue.then(() => run(f, card, key, mode)).catch(() => {});
+    card.el.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+  }
+
+  function makeCard(name, key, mode) {
+    empty.hidden = true;
+    const el = document.createElement('article'); el.className = 'card';
+    el.innerHTML = `<div class="side"><div><span class="badge"></span><h3></h3><p class="status" role="status">Waiting</p></div><div class="bar"><i></i></div></div><div class="side out"></div>`;
+    el.querySelector('h3').textContent = name; el.querySelector('.badge').textContent = `${CRESTS[key].name} · ${EDGES[mode].name}`;
+    list.prepend(el);
+    return { el, name, status: el.querySelector('.status'), bar: el.querySelector('.bar'), fill: el.querySelector('.bar i'), out: el.querySelector('.out'), side: el.querySelector('.side') };
+  }
+
+  const steps = ['Finding the crest', 'Fitting the new crest to the shirt', 'Matching the print, light and fabric', 'Removing the old crest', 'Matching focus'];
+
+  async function run(file, card, key, mode) {
+    await ready;
+    const base = file.name.replace(/\.[^.]+$/, ''), diag = { file: file.name, crest: key, edges: mode, engine: ENGINE_VERSION };
+    card.status.textContent = 'Opening';
+    let bmp;
+    try { bmp = await createImageBitmap(file, { imageOrientation: 'from-image' }); }
+    catch { return fail(card, 'decode', diag); }
+    const W = bmp.width, H = bmp.height, cv = document.createElement('canvas'); cv.width = W; cv.height = H;
+    Object.assign(diag, { width: W, height: H });
+    const g = cv.getContext('2d', { willReadFrequently: true }); g.drawImage(bmp, 0, 0);
+    const src = g.getImageData(0, 0, W, H);
+    let res;
+    try {
+      res = await CrestEngine.process(src.data, W, H, s => { card.status.textContent = s; const i = steps.indexOf(s); card.fill.style.width = ((i + 1) / (steps.length + 1) * 100) + '%'; }, key, { edges: mode });
+    } catch (e) { return fail(card, e.message, diag, bmp); }
+    Object.assign(diag, { roi: res.roi, focus: +res.focus.toFixed(2), scale: +res.scale.toFixed(2) });
+    card.status.textContent = 'Saving';
+    g.putImageData(new ImageData(res.pixels, W, H), 0, 0);
+    const srcBytes = new Uint8Array(await file.arrayBuffer()), icc = file.type === 'image/png' ? [] : CrestEngine.iccSegments(srcBytes);
+    const enc = async (canvas, dpi) => { const b = await new Promise(r => canvas.toBlob(r, 'image/jpeg', 0.95)); return new Blob([CrestEngine.finishJpeg(new Uint8Array(await b.arrayBuffer()), icc, dpi)], { type: 'image/jpeg' }); };
+    const full = await enc(cv, 0);
+    const lc = document.createElement('canvas'), LW = Math.round(1280 * W / Math.max(W, H)), LH = Math.round(1280 * H / Math.max(W, H));
+    lc.width = LW; lc.height = LH; const lg = lc.getContext('2d'); lg.imageSmoothingEnabled = true; lg.imageSmoothingQuality = 'high'; lg.drawImage(cv, 0, 0, LW, LH);
+    const large = await enc(lc, 240);
+    const suffix = CRESTS[key].suffix + EDGES[mode].tag, lsuffix = 'Large' + EDGES[mode].tag;
+    done.push({ base, suffix, lsuffix, full, large });
+    card.bar.remove();
+    card.status.className = 'status ok'; card.status.textContent = 'Done. Check the close-up before sending.';
+    const crops = renderResult(card, bmp, cv, res.roi, base, suffix, lsuffix, full, large, W);
+    const other = mode === 'traced' ? 'straight' : 'traced';
+    const redo = document.createElement('button'); redo.type = 'button'; redo.className = 'chip'; redo.textContent = `Redo with ${other === 'traced' ? 'traced' : 'straight'} edges`;
+    redo.onclick = () => addJob(file, key, other);
+    card.out.querySelector('.actions').append(redo);
+    addFeedback(card, diag, crops);
+    refreshButtons();
+  }
+
+  function fail(card, code, diag, bmp) {
+    card.bar && card.bar.remove();
+    card.status.className = 'status bad';
+    card.status.textContent = messages[code] || 'Something went wrong while editing this photo.';
+    if (code === 'decode') return;
+    diag.error = code;
+    // chest-only crop of the original so the failure can be diagnosed (no face)
+    let crops = null;
+    if (bmp) {
+      const W = bmp.width, H = bmp.height, x0 = Math.round(W * 0.18), y0 = Math.round(H * 0.62), w = Math.round(W * 0.3), h = Math.round(H * 0.33);
+      crops = { before: () => cropURL(bmp, x0, y0, w, h) };
+    }
+    addFeedback(card, diag, crops, true);
+  }
+
+  function cropURL(srcImg, x, y, w, h) { // small JPEG data URL, at most 360px tall
+    const s = Math.min(1, 360 / h), c = document.createElement('canvas'); c.width = Math.max(1, Math.round(w * s)); c.height = Math.max(1, Math.round(h * s));
+    c.getContext('2d').drawImage(srcImg, x, y, w, h, 0, 0, c.width, c.height);
+    return c.toDataURL('image/jpeg', 0.82);
+  }
+
+  function renderResult(card, bmp, cv, roi, base, suffix, lsuffix, full, large, W) {
+    const pad = Math.round(0.02 * W), x0 = Math.max(0, roi[0] - pad), y0 = Math.max(0, roi[1] - pad), x1 = Math.min(cv.width, roi[2] + pad), y1 = Math.min(cv.height, roi[3] + pad);
+    const cw = x1 - x0, ch = y1 - y0;
+    const box = document.createElement('div'); box.className = 'compare'; box.style.setProperty('--ar', `${cw}/${ch}`);
+    const before = document.createElement('canvas'), after = document.createElement('canvas'); after.className = 'after';
+    [before, after].forEach(c => { c.width = cw; c.height = ch; });
+    before.getContext('2d').drawImage(bmp, x0, y0, cw, ch, 0, 0, cw, ch);
+    after.getContext('2d').drawImage(cv, x0, y0, cw, ch, 0, 0, cw, ch);
+    box.append(before, after);
+    box.insertAdjacentHTML('beforeend', '<span class="tag b">Before</span><span class="tag a">After</span><input type="range" min="0" max="100" value="50" aria-label="Compare before and after"><div class="handle"></div>');
+    const range = box.querySelector('input');
+    range.addEventListener('input', () => box.style.setProperty('--pos', range.value + '%'));
+    card.side.append(box);
+    card.side.insertAdjacentHTML('beforeend', '<p class="hint">Drag across the close-up to compare.</p>');
+    const img = document.createElement('img'); img.className = 'thumb'; img.alt = `Finished headshot ${base}`;
+    const fr = new FileReader(); fr.onload = () => { img.src = fr.result; }; fr.readAsDataURL(large);
+    const acts = document.createElement('div'); acts.className = 'actions';
+    const b1 = document.createElement('button'); b1.className = 'btn'; b1.type = 'button'; b1.dataset.dl = '1'; b1.textContent = `Download full size (${cv.width}px)`;
+    const b2 = document.createElement('button'); b2.className = 'btn quiet'; b2.type = 'button'; b2.dataset.dl = '1'; b2.textContent = 'Download web size (1280px)';
+    b1.onclick = () => save(`${base}_${suffix}.jpg`, full);
+    b2.onclick = () => save(`${base}_${lsuffix}.jpeg`, large);
+    acts.append(b1, b2);
+    card.out.append(img, acts);
+    return { before: () => cropURL(bmp, x0, y0, cw, ch), after: () => cropURL(cv, x0, y0, cw, ch) };
+  }
+
+  // ---- feedback ----
+  const ISSUES = [
+    ['shading', 'Dark patch or odd shading'], ['position', 'Wrong position, size or angle'], ['edges', 'Edges or outline look wrong'],
+    ['colour', 'Colours look wrong'], ['oldcrest', 'Old crest still showing'], ['focus', 'Too blurry or too sharp'], ['other', 'Something else'],
+  ];
+  function addFeedback(card, diag, crops, failed = false) {
+    if (!ON_CLAUDE && !FEEDBACK_URL) return; // self-hosted without a form: no feedback UI
+    const fb = document.createElement('div'); fb.className = 'fb';
+    const host = failed ? card.side : card.out;
+    if (failed) {
+      fb.innerHTML = `<div class="fb-q"><button type="button" class="chip" data-v="report" aria-pressed="false">Report this</button></div><div class="fb-form" hidden></div><p class="fb-msg" role="status"></p>`;
+    } else {
+      fb.innerHTML = ON_CLAUDE
+        ? `<div class="fb-q"><span>How does it look?</span><button type="button" class="chip" data-v="good" aria-pressed="false">Looks right</button><button type="button" class="chip" data-v="bad" aria-pressed="false">Something's off</button></div><div class="fb-form" hidden></div><p class="fb-msg" role="status"></p>`
+        : `<div class="fb-q"><button type="button" class="chip" data-v="bad" aria-pressed="false">Something's off</button></div><div class="fb-form" hidden></div><p class="fb-msg" role="status"></p>`;
+    }
+    host.append(fb);
+    const form = fb.querySelector('.fb-form'), msg = fb.querySelector('.fb-msg'), chips = fb.querySelectorAll('.chip');
+    let sent = false;
+    const setMsg = (t, cls = '') => { msg.textContent = t; msg.className = 'fb-msg ' + cls; };
+    chips.forEach(ch => ch.addEventListener('click', async () => {
+      if (sent) return;
+      chips.forEach(c => c.setAttribute('aria-pressed', String(c === ch)));
+      if (ch.dataset.v === 'good') { form.hidden = true; form.innerHTML = ''; await submit({ rating: 'good' }); return; }
+      buildForm();
+    }));
+    function buildForm() {
+      if (form.innerHTML) { form.hidden = false; return; }
+      const id = 'f' + Math.random().toString(36).slice(2, 8);
+      form.innerHTML = (failed ? '' : `<fieldset><legend>What's wrong?</legend>${ISSUES.map(([v, t]) => `<label><input type="checkbox" value="${v}">${t}</label>`).join('')}</fieldset>`) +
+        `<label for="${id}" style="font-weight:700">${failed ? 'What were you expecting?' : 'Where on the crest? Anything else?'}</label>
+         <textarea id="${id}" maxlength="1500" placeholder="${failed ? 'For example: the crest is clearly visible in this photo' : 'For example: dark band across the top of the crest'}"></textarea>
+         ${crops && ON_CLAUDE ? `<label><input type="checkbox" class="att" checked>Include the crest close-up (chest only, no face) so this can be fixed</label>` : ''}
+         <div><button type="button" class="btn send">${ON_CLAUDE ? 'Send feedback' : 'Open feedback form'}</button></div>`;
+      form.hidden = false;
+      form.querySelector('.send').addEventListener('click', async () => {
+        const issues = [...form.querySelectorAll('fieldset input:checked')].map(i => i.value);
+        const note = form.querySelector('textarea').value.trim();
+        if (!failed && !issues.length && !note) { setMsg('Tick what looks wrong or add a note first.', 'bad'); return; }
+        const payload = { rating: failed ? 'failed' : 'bad', issues, note };
+        const att = form.querySelector('.att');
+        if (crops && att && att.checked) { payload.before = crops.before(); if (crops.after) payload.after = crops.after(); }
+        await submit(payload);
+      });
+    }
+    async function submit(extra) {
+      if (!ON_CLAUDE) {
+        const summary = [`Photo: ${diag.file}`, `Crest: ${CRESTS[diag.crest] ? CRESTS[diag.crest].name : diag.crest}`, diag.edges && `Edges: ${diag.edges}`,
+          extra.rating === 'failed' ? `Tool said: ${messages[diag.error] || diag.error}` : `Rating: ${extra.rating === 'good' ? 'Looks right' : "Something's off"}`,
+          extra.issues && extra.issues.length && `Issues: ${extra.issues.map(k => (ISSUES.find(i => i[0] === k) || [k, k])[1]).join(', ')}`,
+          extra.note && `Note: ${extra.note}`, diag.width && `Size: ${diag.width}x${diag.height}px`, `Version: ${diag.engine}`].filter(Boolean).join('\n');
+        // open the form first, while the click still counts as the user's action (popup blockers), then copy
+        const sep = FEEDBACK_URL.includes('?') ? '&' : '?';
+        window.open(FEEDBACK_URL + (FEEDBACK_FIELD ? `${sep}${encodeURIComponent(FEEDBACK_FIELD)}=${encodeURIComponent(summary)}` : ''), '_blank', 'noopener');
+        if (navigator.clipboard) navigator.clipboard.writeText(summary).catch(() => {});
+        sent = true; form.hidden = true; chips.forEach(c => c.disabled = true);
+        setMsg(extra.rating === 'good' ? 'Thanks, noted.' : 'The feedback form opened in a new tab with the details filled in (also copied to your clipboard). Attach a screenshot there if you can.', 'ok');
+        return;
+      }
+      if (!db || !user) { setMsg("Feedback can't be saved in this view. Tell Content & Creative directly.", 'bad'); return; }
+      setMsg('Sending');
+      try {
+        const uid = await user.id();
+        if (!uid) throw { code: 'no_user' };
+        const at = new Date().toISOString();
+        await db.doc(`feedback/${uid}`).set({ last: at }); // index entry so the owner can find this sender's items
+        await db.collection(`feedback/${uid}/items`).add({ ...diag, ...extra, at, ua: navigator.userAgent.slice(0, 160) });
+        sent = true; form.hidden = true; chips.forEach(c => c.disabled = true);
+        setMsg(extra.rating === 'good' ? 'Thanks, noted.' : 'Thanks. Feedback sent with the details needed to fix it.', 'ok');
+      } catch (e) {
+        const code = e && e.code;
+        setMsg(code === 'invalid_argument' || code === 'permission_denied' || code === 'no_user'
+          ? "You don't have permission to send feedback on this page. Ask its owner for Contributor access, or tell Content & Creative directly."
+          : "Feedback didn't send. Try again in a moment.", 'bad');
+      }
+    }
+  }
+
+
+
+  // ---- version label + "newer version available" check ----
+  (() => {
+    const d = new Date(PUBLISHED + 'T12:00:00');
+    const label = `Version ${APP_VERSION} · Published ${d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}`;
+    document.querySelectorAll('[data-version]').forEach(el => el.textContent = label);
+  })();
+  (async () => {
+    if (!window.claude || typeof window.claude.use !== 'function') return;
+    const d = await window.claude.use('db').catch(() => null); if (!d) return;
+    try {
+      const snap = await d.doc('meta/release').get();
+      const latest = snap.exists ? snap.data().version : null;
+      if (latest && newer(latest, APP_VERSION)) {
+        const bar = $('#update'); bar.hidden = false;
+        $('#update-text').textContent = `A newer version (${latest}) is available. Reload this page to get it.`;
+      }
+      // the owner's view records the newest version it has seen, so older open tabs can tell they are stale
+      const u = await window.claude.use('user').catch(() => null);
+      if (u && await u.isOwner() && (!latest || newer(APP_VERSION, latest))) await d.doc('meta/release').set({ version: APP_VERSION, published: PUBLISHED });
+    } catch (e) { /* the check is optional */ }
+  })();
+
+  allBtn.onclick = async () => {
+    if (!window.JSZip || (ON_CLAUDE && !downloads)) return;
+    allBtn.disabled = true; allBtn.textContent = 'Zipping';
+    const zip = new JSZip();
+    done.forEach(d => { zip.file(`${d.base}_${d.suffix}.jpg`, d.full); zip.file(`${d.base}_${d.lsuffix}.jpeg`, d.large); });
+    const blob = await zip.generateAsync({ type: 'blob', compression: 'STORE' });
+    await save('Team_crest_headshots.zip', blob);
+    allBtn.disabled = false; allBtn.textContent = 'Download all (.zip)';
+  };
+
+  const drop = $('#drop'), input = $('#file');
+  pick.onclick = () => input.click();
+  input.onchange = () => { addFiles(input.files); input.value = ''; };
+  ['dragenter', 'dragover'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.add('over'); }));
+  ['dragleave', 'drop'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.remove('over'); }));
+  drop.addEventListener('drop', e => addFiles(e.dataTransfer.files));
+  document.addEventListener('dragover', e => e.preventDefault());
+  document.addEventListener('drop', e => { e.preventDefault(); if (!drop.contains(e.target)) addFiles(e.dataTransfer.files); });
+})();
+
+</script>
+</body>
+</html>
